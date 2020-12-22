@@ -164,14 +164,14 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
                                 DetailsVO detailsVO = gson.fromJson(response.body().get("data").toString(), DetailsVO.class);
                                 Log.d("detailsVo", " " + detailsVO.getCode());
                                 Dialog(detailsVO);
-                                isClick=false;
                             } else {
                                 Log.d("data", "null");
                                 isClick=false;
                             }
 
+                        }else{
+                            isClick=false;
                         }
-                        isClick=false;
                     }
 
                     @Override
@@ -181,7 +181,6 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
                 });
             }else if(result.getString("type").equals("album")){
                 Dialog2(view.getTag(R.string.imgUrl).toString());
-                isClick=false;
             }
         }
     }
@@ -224,6 +223,7 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
         public void onClick(View v) {
             if (v.getId() == R.id.close_btn) {
                 dialog.dismiss();
+                isClick=false;
             } else {
                 ((MainActivity) Objects.requireNonNull(activity)).Restart_Period(dialog);
             }
@@ -246,6 +246,7 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
     private final View.OnClickListener OkListener2 = new View.OnClickListener() {
         public void onClick(View v) {
             dialog2.dismiss();
+            isClick=false;
             ((MainActivity) Objects.requireNonNull(activity)).Restart_Period(dialog2);
         }
     };

@@ -214,16 +214,16 @@ public class ContentRecyclerAdapter2 extends RecyclerView.Adapter<ContentRecycle
                                 DetailsVO detailsVO = gson.fromJson(response.body().get("data").toString(), DetailsVO.class);
                                 Log.d("detailsVo", " "+detailsVO.getCode());
                                 Dialog(detailsVO);
-                                isClick=false;
                             }
                             else{
                                 isClick=false;
                                 Log.d("data","null");
                             }
 
+                        }else{
+                            isClick=false;
                         }
 
-                        isClick=false;
                     }
 
                     @Override
@@ -287,6 +287,7 @@ public class ContentRecyclerAdapter2 extends RecyclerView.Adapter<ContentRecycle
         public void onClick(View v) {
             if(v.getId()==R.id.close_btn){
                 dialog.dismiss();
+                isClick=false;
             }else{
                 ((MainActivity) Objects.requireNonNull(activity)).Restart_Period(dialog);
             }
@@ -313,6 +314,7 @@ public class ContentRecyclerAdapter2 extends RecyclerView.Adapter<ContentRecycle
     private final View.OnClickListener OkListener2 = new View.OnClickListener() {
         public void onClick(View v) {
             dialog2.dismiss();
+            isClick=false;
             ((MainActivity) Objects.requireNonNull(activity)).Restart_Period(dialog2);
         }
     };

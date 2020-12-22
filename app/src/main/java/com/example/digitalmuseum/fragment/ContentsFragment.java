@@ -190,6 +190,7 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
 
 
         else{
+            binding.endSeek.setOnClickListener(this);
             dataVOS.add(0,dataVOS.get(0));
             dataVOS.add(0,dataVOS.get(0));
             dataVOS.add(dataVOS.size()-1,dataVOS.get(0));
@@ -205,17 +206,24 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
             binding.rvSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    Log.d("i", i +" ");
+                    Log.d("getMax", seekBar.getMax() +" ");
                     if(isSeekbar){
-                        binding.contentView.scrollToPosition(i+2);
+                        binding.contentView.scrollToPosition(i+4);
                     }
                     if(i==0){
                         binding.contentView.scrollToPosition(0);
                         binding.startSeek.setVisibility(View.GONE);
                         binding.startSeekRed.setVisibility(View.VISIBLE);
+                        binding.endSeek.setVisibility(View.VISIBLE);
+                        binding.endSeekRed.setVisibility(View.GONE);
                     }else if(i==seekBar.getMax()){
-                        binding.contentView.scrollToPosition(dataVOS.size()-2);
+                        seekBar.setProgress(seekBar.getMax());
+                        binding.contentView.scrollToPosition(i+4);
                         binding.endSeek.setVisibility(View.GONE);
                         binding.endSeekRed.setVisibility(View.VISIBLE);
+                        binding.startSeek.setVisibility(View.VISIBLE);
+                        binding.startSeekRed.setVisibility(View.GONE);
                     }else{
                         binding.endSeek.setVisibility(View.VISIBLE);
                         binding.endSeekRed.setVisibility(View.GONE);
@@ -309,6 +317,9 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
                 }else if(bundle.getString("type").equals("small")){
                     ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SmallFragment(), true, bundle);
                 }
+                break;
+            case R.id.end_seek:
+                binding.rvSeekBar.setProgress(binding.rvSeekBar.getMax());
                 break;
         }
     }
