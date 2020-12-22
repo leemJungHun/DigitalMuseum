@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">DigitalMuseum</string>
+
+
+    <string name="main_text">전통을 기반으로 미래를 창조하는 행복 교동 교육</string>
+    <string name="screen_touch">화면을 터치하세요</string>
+
+    <!--museum-->
+    <string name="museumTitle">나이테 1894</string>
+    <string name="museumText">옛 모습을 그대로 간직하고 있는 교동의 오래된 물건들이에요</string>
+    <string name="museums">나이테 1894 - 박물류</string>
+    <string name="documentation">나이테 1894 - 문서류</string>
+    <string name="books">나이테 1894 - 도서류</string>
+    <!--album-->
+    <string name="albumTitle">졸업앨범</string>
+    <string name="albumText">교동인들의 모습을 담은 소중한 앨범입니다.</string>
+    <!--grateMan-->
+    <string name="greatManTitle">자랑스러운 선배들</string>
+    <string name="greatManText">자랑스러운 우리 교동인들의 모습입니다.</string>
+
+    <!--tagId-->
+    <string name="code">code</string>
+    <string name="title">title</string>
+    <string name="imgUrl">imgUrl</string>
+
+</resources>

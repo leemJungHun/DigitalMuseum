@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mDimen_1">-0.67dp</dimen>
+    <dimen name="dimen_1">0.67dp</dimen>
+    <dimen name="dimen_5">3.33dp</dimen>
+    <dimen name="dimen_10">6.67dp</dimen>
+    <dimen name="dimen_12">8dp</dimen>
+    <dimen name="dimen_16">10.67dp</dimen>
+    <dimen name="dimen_18">12dp</dimen>
+    <dimen name="dimen_20">13.33dp</dimen>
+    <dimen name="dimen_24">16dp</dimen>
+    <dimen name="dimen_32">21.33dp</dimen>
+    <dimen name="dimen_36">24dp</dimen>
+    <dimen name="dimen_40">26.67dp</dimen>
+    <dimen name="dimen_48">32dp</dimen>
+    <dimen name="dimen_54">36dp</dimen>
+    <dimen name="dimen_58">38.67dp</dimen>
+    <dimen name="dimen_64">42.67dp</dimen>
+    <dimen name="dimen_90">60dp</dimen>
+    <dimen name="dimen_96">64dp</dimen>
+    <dimen name="dimen_113">75.33dp</dimen>
+    <dimen name="dimen_126">84dp</dimen>
+    <dimen name="dimen_140">93.33dp</dimen>
+    <dimen name="dimen_144">96dp</dimen>
+    <dimen name="dimen_156">104dp</dimen>
+    <dimen name="dimen_180">120dp</dimen>
+    <dimen name="dimen_192">128dp</dimen>
+    <dimen name="dimen_196">130.67dp</dimen>
+    <dimen name="dimen_216">144dp</dimen>
+    <dimen name="dimen_240">160dp</dimen>
+    <dimen name="dimen_256">170.67dp</dimen>
+    <dimen name="dimen_327">218dp</dimen>
+    <dimen name="dimen_344">229.33dp</dimen>
+    <dimen name="dimen_360">240dp</dimen>
+    <dimen name="dimen_384">256dp</dimen>
+    <dimen name="dimen_400">266.67dp</dimen>
+    <dimen name="dimen_480">320dp</dimen>
+    <dimen name="dimen_544">362.67dp</dimen>
+    <dimen name="dimen_558">372dp</dimen>
+    <dimen name="dimen_620">413.33dp</dimen>
+    <dimen name="dimen_648">432dp</dimen>
+    <dimen name="dimen_650">433.33dp</dimen>
+    <dimen name="dimen_712">474.67dp</dimen>
+    <dimen name="dimen_720">480dp</dimen>
+    <dimen name="dimen_736">490.67dp</dimen>
+    <dimen name="dimen_960">640dp</dimen>
+    <dimen name="dimen_1384">922.67dp</dimen>
+    <dimen name="dimen_1440">960dp</dimen>
+    <dimen name="dimen_1608">1072dp</dimen>
+
+    <dimen name="font_16">10.67sp</dimen>
+    <dimen name="font_18">12sp</dimen>
+    <dimen name="font_24">16sp</dimen>
+    <dimen name="font_28">18.67sp</dimen>
+    <dimen name="font_32">21.33sp</dimen>
+    <dimen name="font_38">25.33sp</dimen>
+    <dimen name="font_42">28sp</dimen>
+    <dimen name="font_46">30.67sp</dimen>
+
+
+
+
+</resources>
