@@ -92,16 +92,8 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
         Collections.sort(dataVOS, (dataVO, t1) -> dataVO.getProductedAt().compareTo(t1.getProductedAt()));
 
 
-
-        if(!dataVOS.get(0).getProductedAt().startsWith("3000")&&!bundle.getString("type").equals("album")){
-            binding.startProduct.setText(dataVOS.get(0).getProductedAt().substring(0,4));
-        }else{
-            binding.startProduct.setText("처음");
-        }
-
         if (bundle.getString("type").equals("album")){
             Collections.sort(dataVOS, (dataVO, t1) -> dataVO.getCode().compareTo(t1.getCode()));
-            binding.endProduct.setText("끝");
         }
 
         if(dataVOS.size()>90){
