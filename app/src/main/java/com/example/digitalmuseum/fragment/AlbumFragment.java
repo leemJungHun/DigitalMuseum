@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,8 +45,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AlbumFragment extends Fragment implements View.OnClickListener {
     FragmentAlbumBinding binding;
-    AlbumRecyclerAdapter adapter;
-    ArrayList<MediumVO> mediumVOS;
+    Bundle bundle;
+    private ArrayList<SmallVO> smallVOS = new ArrayList<>();
+    boolean itemClick = false;
 
     @Nullable
     @Override
@@ -53,70 +55,100 @@ public class AlbumFragment extends Fragment implements View.OnClickListener {
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_album, container, false);
 
-        binding.mediumView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                if(e.getAction()==MotionEvent.ACTION_DOWN){
-                    ((MainActivity) Objects.requireNonNull(getActivity())).Restart_Period();
-                }
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            }
-        });
-
-        Bundle bundle = getArguments();
+        bundle = getArguments();
         assert bundle != null;
-        mediumVOS = new ArrayList<>();
-
-        String[] code = {"M8","M9","M10","M11","M12","M13"};
-        String[] title = {"1927-1946","1947-1966","1967-1986","1987-2006","2007-2016","2017-현재"};
-
-        for(int i=0;i<code.length;i++){
-            MediumVO addMediumVO = new MediumVO();
-            addMediumVO.setCode(code[i]);
-            addMediumVO.setTitle(title[i]);
-            mediumVOS.add(addMediumVO);
-        }
-
 
         //addMediumVO
 
 
         //Collections.sort(mediumVOS, (mediumVO, t1) -> mediumVO.getCode().compareTo(t1.getCode()));
 
-        adapter = new AlbumRecyclerAdapter((MainActivity) getActivity(), bundle);
-
-        binding.mediumView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-
-        setText(bundle.getString("LCode"));
-
         binding.backPage.setOnClickListener(this);
+        binding.year2040.setOnClickListener(this);
+        binding.year5070.setOnClickListener(this);
+        binding.year8000.setOnClickListener(this);
+        binding.year0020.setOnClickListener(this);
 
         return binding.getRoot();
     }
 
-    public void setText(String LCode) {
-        binding.mediumView.setAdapter(adapter);
-        adapter.updateData(mediumVOS);
-        binding.mediumTitle.setText(R.string.albumTitle);
-        binding.mediumText.setText(R.string.albumText);
-    }
 
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.backPage:
-                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(), true, null);
-                break;
+        if (view.getId() == R.id.backPage) {
+            ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(), true, null);
+        } else {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(HttpRequestService.URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            HttpRequestService httpRequestService = retrofit.create(HttpRequestService.class);
+
+            if (!itemClick) {
+                itemClick = true;
+                httpRequestService.getSmallList(view.getTag().toString()).enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        itemClick = false;
+                        if (response.isSuccessful() && response.body() != null) {
+                            Gson gson = new Gson();
+                            String contentTitle = "";
+                            Fragment fragment;
+                            fragment = new AlbumSebuFragment();
+                            switch (view.getTag().toString()) {
+                                case "M7":
+                                    contentTitle = "졸업앨범 - 1920 ~ 1949";
+                                    fragment = new Album2040Fragment();
+                                    break;
+                                case "M8":
+                                    contentTitle = "졸업앨범 - 1950 ~ 1979";
+                                    break;
+                                case "M9":
+                                    contentTitle = "졸업앨범 - 1980 ~ 1999";
+                                    break;
+                                case "M10":
+                                    contentTitle = "졸업앨범 - 2000 ~ 현재";
+                                    break;
+
+                            }
+                            if (!response.body().get("data").toString().equals("null")) {
+                                JsonArray jsonArray = response.body().getAsJsonArray("data");
+
+                                for (JsonElement element : jsonArray) {
+                                    SmallVO dataVO = gson.fromJson(element, SmallVO.class);
+                                    Log.d("getTitle", " " + dataVO.getTitle());
+                                    Log.d("getImage", " " + dataVO.getImage());
+                                    Log.d("getCode", " " + dataVO.getCode());
+                                    smallVOS.add(dataVO);
+                                }
+                                bundle.putParcelableArrayList("smallVOS", smallVOS);
+                                bundle.putString("type", "album");
+
+                                bundle.putString("MCode", view.getTag().toString());
+                                bundle.putString("ContentTitle", contentTitle);
+
+                                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(fragment, false, bundle);
+                            } else {
+                                bundle.putString("type", "album");
+                                bundle.putString("ContentTitle", contentTitle);
+                                bundle.putString("MCode", view.getTag().toString());
+
+                                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new NoContentsFragment(), false, bundle);
+                                Log.d("data", "null");
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        itemClick = false;
+                    }
+                });
+            }
         }
     }
 }

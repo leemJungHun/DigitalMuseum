@@ -8,6 +8,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/kyodong_bg_01"
             />
 
@@ -30,7 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="@dimen/dimen_113"
-            android:textSize="@dimen/font_42"
+            android:textSize="@dimen/font_60"
             android:text="전통을 기반으로 미래를 창조하는 행복 교동 교육"
             android:textColor="#000000"
             android:fontFamily="@font/ridibatang"
@@ -149,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="자랑스러운 선배들"
+                android:text="자랑스러운 교동인"
                 android:fontFamily="@font/ridibatang"
                 android:textColor="#FFFFFF"
                 android:textSize="@dimen/font_38"

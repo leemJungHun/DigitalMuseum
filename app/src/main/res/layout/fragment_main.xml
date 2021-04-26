@@ -8,12 +8,14 @@
             android:id="@+id/backend_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/kyodong_img_001_03"
             />
         <ImageView
             android:id="@+id/forward_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/kyodong_img_001_02"
             />
         <androidx.constraintlayout.widget.ConstraintLayout

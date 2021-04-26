@@ -1,8 +1,11 @@
 package com.example.digitalmuseum.fragment;
 
 import android.annotation.SuppressLint;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,10 +41,21 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_history, container, false);
+        if(binding == null) {
+            if(container!=null) {
+                container.removeAllViews();
+            }
+            try {
+                binding = DataBindingUtil.inflate(
+                        inflater, R.layout.fragment_history, container, false);
+            } catch (InflateException e) {
+                e.printStackTrace();
+            }
+        }
 
-        adapter = new HistoryRecyclerAdapter((MainActivity)getActivity(),getContext());
+        adapter = new HistoryRecyclerAdapter((MainActivity) getActivity(), getContext());
+
+
 
         CenterLayoutManager layoutManager = new CenterLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         SnapHelper snapHelper = new PagerSnapHelper();
@@ -51,7 +65,7 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
         binding.historyView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                if(e.getAction()==MotionEvent.ACTION_DOWN){
+                if (e.getAction() == MotionEvent.ACTION_DOWN) {
                     ((MainActivity) Objects.requireNonNull(getActivity())).Restart_Period();
                 }
                 return false;
@@ -69,7 +83,7 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onFirstVisiblePositionChanged(int position) {
                 Log.d("현재보이는 포지션", " " + position);
-                switch (position){
+                switch (position) {
                     case 0:
                         setSelectImgs(0);
                         break;
@@ -92,7 +106,7 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onLastVisiblePositionChanged(int position) {
                 Log.d("현재보이는 포지션", " " + position);
-                switch (position){
+                switch (position) {
                     case 1:
                         setSelectImgs(1);
                         break;
@@ -138,7 +152,7 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.backPage:
-                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(),true, null);
+                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(), true, null);
                 break;
             case R.id.select_1:
                 binding.historyView.scrollToPosition(0);
@@ -167,11 +181,11 @@ public class HistoryFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void setSelectImgs(int position){
-        for(int i = 0 ; i<selectImgs.size();i++){
-            if(i==position){
+    public void setSelectImgs(int position) {
+        for (int i = 0; i < selectImgs.size(); i++) {
+            if (i == position) {
                 selectImgs.get(i).setImageResource(R.drawable.seekbar_thumb);
-            }else {
+            } else {
                 selectImgs.get(i).setImageResource(R.drawable.history_bar_gray);
             }
         }

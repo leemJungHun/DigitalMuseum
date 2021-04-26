@@ -8,6 +8,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/kyodong_bg_01"
             />
 
@@ -67,6 +68,38 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="뒤로가기"
+                android:textSize="@dimen/font_32"
+                android:textColor="#000000"
+                android:fontFamily="@font/ridibatang"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/firstPage"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_90"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+            <ImageView
+                android:id="@+id/first_img"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                app:layout_constraintEnd_toStartOf="@+id/first_text"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/kyodong_icon_backward"
+                />
+            <TextView
+                android:id="@+id/first_text"
+                app:layout_constraintTop_toTopOf="@id/first_img"
+                app:layout_constraintBottom_toBottomOf="@id/first_img"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/dimen_48"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="처음으로"
                 android:textSize="@dimen/font_32"
                 android:textColor="#000000"
                 android:fontFamily="@font/ridibatang"

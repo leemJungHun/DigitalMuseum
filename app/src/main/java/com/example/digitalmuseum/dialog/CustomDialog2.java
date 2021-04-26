@@ -11,13 +11,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.digitalmuseum.R;
+import com.example.digitalmuseum.network.HttpRequestService;
 import com.example.digitalmuseum.network.vo.DetailsVO;
 
 public class CustomDialog2 extends Dialog {
     private ConstraintLayout custom_back;
     private ImageView itemImage;
     String imgUrl;
-    String URL = "http://10.20.170.240:8080"; //
+    String URL = HttpRequestService.URL + "/kyodong"; //
 
     private View.OnClickListener mBtnClickListener;
 

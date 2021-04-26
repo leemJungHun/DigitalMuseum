@@ -9,12 +9,14 @@ public class DataVO implements Parcelable {
     String code;
     String productedAt;
     String image;
+    String content;
 
-    public DataVO(String title, String code, String productedAt, String image) {
+    public DataVO(String title, String code, String productedAt, String image, String content) {
         this.title = title;
         this.code = code;
         this.productedAt = productedAt;
         this.image = image;
+        this.content = content;
     }
 
     protected DataVO(Parcel in) {
@@ -22,6 +24,7 @@ public class DataVO implements Parcelable {
         code = in.readString();
         productedAt = in.readString();
         image = in.readString();
+        content = in.readString();
     }
 
     @Override
@@ -30,6 +33,7 @@ public class DataVO implements Parcelable {
         dest.writeString(code);
         dest.writeString(productedAt);
         dest.writeString(image);
+        dest.writeString(content);
     }
 
     @Override
@@ -81,4 +85,11 @@ public class DataVO implements Parcelable {
         this.productedAt = productedAt;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

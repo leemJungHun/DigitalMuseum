@@ -8,6 +8,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/kyodong_bg_01"
             />
 
@@ -20,7 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="@dimen/dimen_113"
-            android:textSize="@dimen/font_42"
+            android:textSize="@dimen/font_48"
             android:text="@string/museumTitle"
             android:textColor="#000000"
             android:fontFamily="@font/ridibatang"

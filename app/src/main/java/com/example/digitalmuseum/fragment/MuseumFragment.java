@@ -3,6 +3,7 @@ package com.example.digitalmuseum.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +53,17 @@ public class MuseumFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_museum, container, false);
-
+        if(binding == null) {
+            if(container!=null) {
+                container.removeAllViews();
+            }
+            try {
+                binding = DataBindingUtil.inflate(
+                        inflater, R.layout.fragment_museum, container, false);
+            } catch (InflateException e) {
+                e.printStackTrace();
+            }
+        }
         result = getArguments();
         assert result != null;
 
@@ -98,12 +107,10 @@ public class MuseumFragment extends Fragment implements View.OnClickListener {
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         if(response.isSuccessful() && response.body() != null){
                             Gson gson = new Gson();
-                            if(!response.body().get("data").toString().equals("null")){
+                            if(response.body().get("data")!=null){
                                 Fragment fragment;
-                                JsonObject jsonObject = response.body().getAsJsonObject("data");
-                                JsonArray jsonArray;
-                                if(jsonObject.get("smalls")!=null){
-                                    jsonArray = jsonObject.getAsJsonArray("smalls");
+                                JsonArray jsonArray = response.body().getAsJsonArray("data");
+                                if(!view.getTag().toString().equals("M4")){
                                     for (JsonElement element : jsonArray) {
                                         SmallVO smallVO = gson.fromJson(element, SmallVO.class);
                                         Log.d("getTitle", " " + smallVO.getTitle());
@@ -114,7 +121,6 @@ public class MuseumFragment extends Fragment implements View.OnClickListener {
                                     fragment = new SmallFragment();
                                     result.putParcelableArrayList("smallVOS", smallVOS);
                                 }else{
-                                    jsonArray = jsonObject.getAsJsonArray("datas");
                                     for (JsonElement element : jsonArray) {
                                         DataVO dataVO = gson.fromJson(element, DataVO.class);
                                         Log.d("getTitle", " " + dataVO.getTitle());

@@ -4,22 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_620">
+        android:layout_height="@dimen/dimen_720">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/pattern_01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_32"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/start_margin"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
 
             <ImageView
                 android:id="@+id/contentItemImage"
                 android:layout_width="@dimen/dimen_400"
                 android:layout_height="@dimen/dimen_360"
-                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,16 +40,30 @@
 
             <TextView
                 android:id="@+id/contentItemTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nanumbarungothic_r"
                 android:gravity="center"
                 android:text=""
                 android:textColor="#000000"
                 android:textSize="@dimen/font_18"
+                app:layout_constraintEnd_toEndOf="@id/contentItemImage"
+                app:layout_constraintStart_toStartOf="@id/contentItemImage"
+                app:layout_constraintTop_toBottomOf="@id/contentItemProducted"
+                />
+            <TextView
+                android:id="@+id/contentExplainText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumbarungothic_r"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="@dimen/font_18"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/contentItemProducted"
+                app:layout_constraintTop_toBottomOf="@id/contentItemTitle"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

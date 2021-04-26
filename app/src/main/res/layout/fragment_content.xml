@@ -1,174 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        >
+        android:background="#FFFFFF">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/kyodong_bg_01"
-            />
+            android:scaleType="centerCrop"
+            android:src="@drawable/kyodong_bg_01" />
 
         <TextView
             android:id="@+id/contentTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="@dimen/dimen_48"
-            android:textSize="@dimen/font_32"
+            android:fontFamily="@font/ridibatang"
+            android:gravity="center"
             android:text="@string/museumTitle"
             android:textColor="#000000"
+            android:textSize="@dimen/font_32"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/contentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_16"
             android:fontFamily="@font/ridibatang"
-            />
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="@dimen/font_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contentTitle" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contentView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dimen_144"
             android:overScrollMode="never"
             android:scrollbars="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/dimen_144"
-            />
-
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/rv_size"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatSeekBar
-            android:id="@+id/rv_seek_bar"
+            android:visibility="invisible"
+            android:id="@+id/rv_size"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_96"
+            android:layout_marginEnd="@dimen/dimen_96"
+            android:layout_marginBottom="@dimen/dimen_192"
             android:paddingStart="0dp"
             android:paddingEnd="0dp"
             android:progress="0"
             android:progressDrawable="@drawable/seekbar"
-            android:layout_height="wrap_content"
             android:thumb="@drawable/seekbar_thumb"
             android:thumbOffset="@dimen/mDimen_1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="@dimen/dimen_192"
-            android:layout_marginStart="@dimen/dimen_96"
-            android:layout_marginEnd="@dimen/dimen_96"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/start_seek"
-            android:layout_width="@dimen/dimen_16"
-            android:layout_height="@dimen/dimen_16"
-            android:src="@drawable/seek_start_end"
-            app:layout_constraintStart_toStartOf="@id/rv_seek_bar"
-            app:layout_constraintTop_toTopOf="@id/rv_seek_bar"
-            app:layout_constraintBottom_toBottomOf="@id/rv_seek_bar"
-            />
 
-        <ImageView
-            android:visibility="visible"
-            android:id="@+id/start_seek_red"
-            android:layout_width="@dimen/dimen_16"
-            android:layout_height="@dimen/dimen_16"
-            android:src="@drawable/seekbar_thumb"
-            app:layout_constraintStart_toStartOf="@id/rv_seek_bar"
-            app:layout_constraintTop_toTopOf="@id/rv_seek_bar"
-            app:layout_constraintBottom_toBottomOf="@id/rv_seek_bar"
-            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/seek_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/startProduct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/start_seek"
-            app:layout_constraintStart_toStartOf="@id/start_seek"
-            app:layout_constraintEnd_toEndOf="@id/start_seek"
-            android:layout_marginTop="@dimen/dimen_16"
-            android:text="처음"
-            android:textColor="#000000"
-            android:textSize="@dimen/font_32"
-            android:fontFamily="@font/ridibatang"
-            />
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/rv_seek_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_96"
+                android:layout_marginEnd="@dimen/dimen_96"
+                android:layout_marginBottom="@dimen/dimen_192"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:progress="0"
+                android:progressDrawable="@drawable/seekbar"
+                android:thumb="@drawable/seekbar_thumb"
+                android:thumbOffset="@dimen/mDimen_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/end_seek"
-            android:layout_width="@dimen/dimen_16"
-            android:layout_height="@dimen/dimen_16"
-            android:src="@drawable/seek_start_end"
-            app:layout_constraintEnd_toEndOf="@id/rv_seek_bar"
-            app:layout_constraintTop_toTopOf="@id/rv_seek_bar"
-            app:layout_constraintBottom_toBottomOf="@id/rv_seek_bar"
-            />
+            <ImageView
+                android:id="@+id/start_seek"
+                android:layout_width="@dimen/dimen_16"
+                android:layout_height="@dimen/dimen_16"
+                android:src="@drawable/seek_start_end"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/rv_seek_bar"
+                app:layout_constraintStart_toStartOf="@id/rv_seek_bar"
+                app:layout_constraintTop_toTopOf="@id/rv_seek_bar" />
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/end_seek_red"
-            android:layout_width="@dimen/dimen_16"
-            android:layout_height="@dimen/dimen_16"
-            android:src="@drawable/seekbar_thumb"
-            app:layout_constraintEnd_toEndOf="@id/rv_seek_bar"
-            app:layout_constraintTop_toTopOf="@id/rv_seek_bar"
-            app:layout_constraintBottom_toBottomOf="@id/rv_seek_bar"
-            />
+            <ImageView
+                android:id="@+id/start_seek_red"
+                android:layout_width="@dimen/dimen_16"
+                android:layout_height="@dimen/dimen_16"
+                android:src="@drawable/seekbar_thumb"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/rv_seek_bar"
+                app:layout_constraintStart_toStartOf="@id/rv_seek_bar"
+                app:layout_constraintTop_toTopOf="@id/rv_seek_bar" />
 
-        <TextView
-            android:id="@+id/endProduct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/end_seek"
-            app:layout_constraintStart_toStartOf="@id/end_seek"
-            app:layout_constraintEnd_toEndOf="@id/end_seek"
-            android:layout_marginTop="@dimen/dimen_16"
-            android:text="끝"
-            android:textColor="#000000"
-            android:textSize="@dimen/font_32"
-            android:fontFamily="@font/ridibatang"
-            />
+            <TextView
+                android:id="@+id/startProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16"
+                android:fontFamily="@font/ridibatang"
+                android:text="처음"
+                android:textColor="#000000"
+                android:textSize="@dimen/font_32"
+                app:layout_constraintEnd_toEndOf="@id/start_seek"
+                app:layout_constraintStart_toStartOf="@id/start_seek"
+                app:layout_constraintTop_toBottomOf="@id/start_seek" />
+
+            <ImageView
+                android:id="@+id/end_seek"
+                android:layout_width="@dimen/dimen_16"
+                android:layout_height="@dimen/dimen_16"
+                android:src="@drawable/seek_start_end"
+                app:layout_constraintBottom_toBottomOf="@id/rv_seek_bar"
+                app:layout_constraintEnd_toEndOf="@id/rv_seek_bar"
+                app:layout_constraintTop_toTopOf="@id/rv_seek_bar" />
+
+            <ImageView
+                android:id="@+id/end_seek_red"
+                android:layout_width="@dimen/dimen_16"
+                android:layout_height="@dimen/dimen_16"
+                android:src="@drawable/seekbar_thumb"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/rv_seek_bar"
+                app:layout_constraintEnd_toEndOf="@id/rv_seek_bar"
+                app:layout_constraintTop_toTopOf="@id/rv_seek_bar" />
+
+            <TextView
+                android:id="@+id/endProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16"
+                android:fontFamily="@font/ridibatang"
+                android:text="끝"
+                android:textColor="#000000"
+                android:textSize="@dimen/font_32"
+                app:layout_constraintEnd_toEndOf="@id/end_seek"
+                app:layout_constraintStart_toStartOf="@id/end_seek"
+                app:layout_constraintTop_toBottomOf="@id/end_seek" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <ImageView
             android:id="@+id/get_size"
             android:layout_width="@dimen/dimen_400"
             android:layout_height="@dimen/dimen_360"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:visibility="invisible"
-            />
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/backPage"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dimen_90"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            >
+            app:layout_constraintStart_toStartOf="parent">
+
             <ImageView
                 android:id="@+id/backward_img"
                 android:layout_width="@dimen/dimen_48"
                 android:layout_height="@dimen/dimen_48"
                 android:layout_marginStart="@dimen/dimen_48"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:src="@drawable/kyodong_icon_backward"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
-                app:layout_constraintTop_toTopOf="@id/backward_img"
-                app:layout_constraintBottom_toBottomOf="@id/backward_img"
-                app:layout_constraintStart_toEndOf="@id/backward_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/ridibatang"
                 android:gravity="center"
                 android:text="뒤로가기"
-                android:textSize="@dimen/font_32"
                 android:textColor="#000000"
+                android:textSize="@dimen/font_32"
+                app:layout_constraintBottom_toBottomOf="@id/backward_img"
+                app:layout_constraintStart_toEndOf="@id/backward_img"
+                app:layout_constraintTop_toTopOf="@id/backward_img" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/firstPage"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_90"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/first_img"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_marginEnd="@dimen/dimen_48"
+                android:src="@drawable/kyodong_icon_home"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/ridibatang"
-                />
+                android:gravity="center"
+                android:text="처음으로"
+                android:textColor="#000000"
+                android:textSize="@dimen/font_32"
+                app:layout_constraintBottom_toBottomOf="@id/first_img"
+                app:layout_constraintEnd_toStartOf="@id/first_img"
+                app:layout_constraintTop_toTopOf="@id/first_img" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

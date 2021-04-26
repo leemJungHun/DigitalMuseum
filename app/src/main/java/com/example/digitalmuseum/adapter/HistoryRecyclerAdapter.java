@@ -70,7 +70,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         //holder.scheduleIcon.setImageDrawable(item.getIcon()) ;
         switch (position){
             case 0:
-                holder.historyImg.setImageResource(R.drawable.kyodong_003_01);
+                holder.historyImg.setImageResource(R.drawable.kyodong_003_01_01);
                 break;
             case 1:
                 holder.historyImg.setImageResource(R.drawable.kyodong_003_02_01);

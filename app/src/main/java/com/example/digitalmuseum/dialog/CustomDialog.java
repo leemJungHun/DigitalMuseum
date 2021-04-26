@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.digitalmuseum.R;
+import com.example.digitalmuseum.network.HttpRequestService;
 import com.example.digitalmuseum.network.vo.DetailsVO;
 
 import java.util.Objects;
@@ -35,7 +36,7 @@ public class CustomDialog extends Dialog {
     private TextView storageValue;
     private TextView store_numValue;
     private TextView contentText;
-    String URL = "http://10.20.170.240:8080"; //
+    String URL = HttpRequestService.URL + "/kyodong"; //
 
 
 
@@ -67,7 +68,7 @@ public class CustomDialog extends Dialog {
         String amount = detailsVO.getAmount()+"개";
         classified.setText(detailsVO.getCode());
         producted.setText(detailsVO.getProductedAt().substring(0,4));
-        title.setText(detailsVO.getTitle());
+        title.setText(detailsVO.getTitle().replaceAll("\\?", ""));
         amountValue.setText(amount);
         sizeValue.setText(detailsVO.getSize());
         materialValue.setText(detailsVO.getMaterial());

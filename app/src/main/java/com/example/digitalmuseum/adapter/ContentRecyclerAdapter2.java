@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.digitalmuseum.dialog.CustomDialog;
 import com.example.digitalmuseum.MainActivity;
 import com.example.digitalmuseum.R;
@@ -43,7 +44,7 @@ public class ContentRecyclerAdapter2 extends RecyclerView.Adapter<ContentRecycle
     private boolean isFirst=true;
     private Context context;
     private boolean isClick =false;
-    String URL = "http://10.20.170.240:8080"; //
+    String URL = HttpRequestService.URL + "/kyodong"; //
     CustomDialog dialog;
     CustomDialog2 dialog2;
 
@@ -139,8 +140,12 @@ public class ContentRecyclerAdapter2 extends RecyclerView.Adapter<ContentRecycle
         holder.contentImage.setTag(R.string.imgUrl,item.getImage());
         holder.contentProduct.setTag(R.string.imgUrl,item.getImage());
         if(item.getImage()!=null){
-            Log.d("getImage"," " + URL+item.getImage());
-            Glide.with(activity).load(URL + item.getImage()).thumbnail(0.01f).into(holder.contentImage);
+            try {
+                Log.d("getImage"," " + URL+item.getImage());
+                Glide.with(activity).load(URL + item.getImage()).override(400,360).thumbnail(0.01f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.contentImage);
+            }catch (RuntimeException e){
+                Log.e("runtime",e+" ");
+            }
         }
         holder.contentTitle.setOnClickListener(this);
         holder.contentImage.setOnClickListener(this);
@@ -159,8 +164,12 @@ public class ContentRecyclerAdapter2 extends RecyclerView.Adapter<ContentRecycle
             holder.contentImage2.setTag(R.string.imgUrl,item2.getImage());
             holder.contentProduct2.setTag(R.string.imgUrl,item2.getImage());
             if(item2.getImage()!=null){
-                Log.d("getImage"," " + URL+item2.getImage());
-                Glide.with(activity).load(URL + item2.getImage()).thumbnail(0.01f).into(holder.contentImage2);
+                try {
+                    Log.d("getImage", " " + URL + item2.getImage());
+                    Glide.with(activity).load(URL + item2.getImage()).override(400, 360).thumbnail(0.01f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.contentImage2);
+                }catch (RuntimeException e){
+                    Log.e("runtime", e +" ");
+                }
             }
             holder.contentTitle2.setOnClickListener(this);
             holder.contentImage2.setOnClickListener(this);
@@ -197,7 +206,7 @@ public class ContentRecyclerAdapter2 extends RecyclerView.Adapter<ContentRecycle
     public void onClick(View view) {
         if(!isClick){
             isClick=true;
-            if(!result.getString("type").equals("album")&&!result.getString("type").equals("great")) {
+            if(!result.getString("type").equals("albumSebu")&&!result.getString("type").equals("great")&&!result.getString("type").equals("album2040")){
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl(HttpRequestService.URL)
                         .addConverterFactory(GsonConverterFactory.create())
@@ -231,7 +240,7 @@ public class ContentRecyclerAdapter2 extends RecyclerView.Adapter<ContentRecycle
                         isClick=false;
                     }
                 });
-            }else if(result.getString("type").equals("album")){
+            }else if(result.getString("type").equals("albumSebu")||result.getString("type").equals("album2040")){
                 Dialog2(view.getTag(R.string.imgUrl).toString());
             }
         }

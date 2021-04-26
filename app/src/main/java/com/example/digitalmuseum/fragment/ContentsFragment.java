@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,8 +52,17 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_content, container, false);
+        if(binding == null) {
+            if(container!=null) {
+                container.removeAllViews();
+            }
+            try {
+                binding = DataBindingUtil.inflate(
+                        inflater, R.layout.fragment_content, container, false);
+            } catch (InflateException e) {
+                e.printStackTrace();
+            }
+        }
 
         bundle = getArguments();
 
@@ -60,7 +70,12 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
 
         setContent1();
 
+        if(bundle.getString("MCode").equals("M4")){
+            binding.contentText.setText("교동 역대 행사 사진 모음");
+        }
+
         binding.backPage.setOnClickListener(this);
+        binding.firstPage.setOnClickListener(this);
         binding.contentView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
@@ -89,13 +104,11 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
     public void setContent1() {
         ArrayList<DataVO> dataVOS = bundle.getParcelableArrayList("dataVOS");
 
-        Collections.sort(dataVOS, (dataVO, t1) -> dataVO.getProductedAt().compareTo(t1.getProductedAt()));
 
 
-        if (bundle.getString("type").equals("album")){
-            Collections.sort(dataVOS, (dataVO, t1) -> dataVO.getCode().compareTo(t1.getCode()));
+        if (!bundle.getString("type").equals("album2040")&&!bundle.getString("type").equals("albumSebu")){
+            Collections.sort(dataVOS, (dataVO, t1) -> dataVO.getProductedAt().compareTo(t1.getProductedAt()));
         }
-
         if(dataVOS.size()>90){
             ArrayList<DataVO> dataVOS1 = new ArrayList<>();
             ArrayList<DataVO> dataVOS2 = new ArrayList<>();
@@ -110,82 +123,134 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
             ContentRecyclerAdapter2 adapter;
             CenterLayoutManager layoutManager = new CenterLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-            SnapHelper snapHelper = new LinearSnapHelper();
+
 
             adapter = new ContentRecyclerAdapter2((MainActivity) getActivity(), bundle,getContext());
 
-            binding.rvSeekBar.setMax(dataVOS1.size()-2);
-            binding.rvSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                    if(isSeekbar){
-                        binding.contentView.scrollToPosition(i+1);
+            SnapHelper snapHelper = new LinearSnapHelper();
+            snapHelper.attachToRecyclerView(binding.contentView);
+
+            if (bundle.getString("type").equals("album2040")||bundle.getString("type").equals("albumSebu")){
+                binding.seekLayout.setVisibility(View.GONE);
+            }else {
+                binding.rvSeekBar.setMax(dataVOS1.size() - 6);
+                binding.rvSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                        if (isSeekbar) {
+                            binding.contentView.scrollToPosition(i + 1);
+                        }
+                        if (i == 0) {
+                            binding.contentView.scrollToPosition(0);
+                            binding.startSeek.setVisibility(View.GONE);
+                            binding.startSeekRed.setVisibility(View.VISIBLE);
+                        } else if (i == seekBar.getMax()) {
+                            binding.rvSeekBar.setProgress(centerPosition + 2);
+                            Log.d("getMax", " ");
+                            binding.endSeek.setVisibility(View.GONE);
+                            binding.endSeekRed.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.endSeek.setVisibility(View.VISIBLE);
+                            binding.endSeekRed.setVisibility(View.GONE);
+                            binding.startSeek.setVisibility(View.VISIBLE);
+                            binding.startSeekRed.setVisibility(View.GONE);
+
+                        }
                     }
-                    if(i==0){
-                        binding.contentView.scrollToPosition(0);
-                        binding.startSeek.setVisibility(View.GONE);
-                        binding.startSeekRed.setVisibility(View.VISIBLE);
-                    }else if(i==seekBar.getMax()){
-                        binding.rvSeekBar.setProgress(centerPosition+2);
-                        Log.d("getMax"," ");
-                        binding.endSeek.setVisibility(View.GONE);
-                        binding.endSeekRed.setVisibility(View.VISIBLE);
-                    }else{
-                        binding.endSeek.setVisibility(View.VISIBLE);
-                        binding.endSeekRed.setVisibility(View.GONE);
-                        binding.startSeek.setVisibility(View.VISIBLE);
-                        binding.startSeekRed.setVisibility(View.GONE);
 
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        isSeekbar = true;
                     }
-                }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    isSeekbar=true;
-                }
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        isSeekbar = false;
+                    }
+                });
 
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    isSeekbar=false;
-                }
-            });
+                binding.contentView.addOnScrollListener(new VisiblePositionChangeListener(layoutManager, new VisiblePositionChangeListener.OnChangeListener() {
+                    @Override
+                    public void onFirstVisiblePositionChanged(int position) {
+                        Log.d("현재보이는 포지션", " " + position);
+                        centerPosition = position;
+                        if(!isSeekbar){
+                            binding.rvSeekBar.setProgress(centerPosition);
+                        }
+                    }
 
+                    @Override
+                    public void onLastVisiblePositionChanged(int position) {
+                        Log.d("현재보이는 포지션", " " + position);
+                        Log.d("getChildCount()", binding.contentView.getChildCount() + " ");
+                        centerPosition = position-5;
+                        if(!isSeekbar){
+                            binding.rvSeekBar.setProgress(centerPosition);
+                        }
+                    }
+                }));
+            }
             binding.contentView.setLayoutManager(layoutManager);
             binding.contentView.setAdapter(adapter);
             binding.contentView.setHasFixedSize(true);
-            binding.contentView.addOnScrollListener(new VisiblePositionChangeListener(layoutManager, new VisiblePositionChangeListener.OnChangeListener() {
-                @Override
-                public void onFirstVisiblePositionChanged(int position) {
-                    Log.d("현재보이는 포지션", " " + position);
-                    centerPosition = position+2;
-                    if(!isSeekbar){
-                        binding.rvSeekBar.setProgress(centerPosition-2);
-                    }
-                }
-
-                @Override
-                public void onLastVisiblePositionChanged(int position) {
-                    Log.d("현재보이는 포지션", " " + position);
-                    Log.d("getChildCount()", binding.contentView.getChildCount() + " ");
-                    centerPosition = position-2;
-                    if(!isSeekbar){
-                        binding.rvSeekBar.setProgress(centerPosition+2);
-                    }
-                }
-            }));
-
-            snapHelper.attachToRecyclerView(binding.contentView);
             adapter.updateData(dataVOS1, dataVOS2);
-
-        }
-
-
-
-        else{
+        } else{
             binding.endSeek.setOnClickListener(this);
+
             dataVOS.add(0,dataVOS.get(0));
             dataVOS.add(0,dataVOS.get(0));
-            dataVOS.add(dataVOS.size()-1,dataVOS.get(0));
+            dataVOS.add(dataVOS.size(),dataVOS.get(0));
+            dataVOS.add(dataVOS.size(),dataVOS.get(0));
+
+            for(int i = 0 ; i<dataVOS.size() ; i++){
+                Log.d("datavos",dataVOS.get(i).getTitle()+" ");
+            }
+
+            if (bundle.getString("type").equals("album2040")||bundle.getString("type").equals("albumSebu")){
+                binding.seekLayout.setVisibility(View.GONE);
+            }else{
+                binding.rvSeekBar.setMax(dataVOS.size()-5);
+                binding.rvSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                        Log.d("i", i +" ");
+                        Log.d("getMax", seekBar.getMax() +" ");
+                        if(isSeekbar){
+                            binding.contentView.scrollToPosition(i+4);
+                        }
+                        if(i==0){
+                            binding.contentView.scrollToPosition(0);
+                            binding.startSeek.setVisibility(View.GONE);
+                            binding.startSeekRed.setVisibility(View.VISIBLE);
+                            binding.endSeek.setVisibility(View.VISIBLE);
+                            binding.endSeekRed.setVisibility(View.GONE);
+                        }else if(i==seekBar.getMax()){
+                            seekBar.setProgress(seekBar.getMax());
+                            binding.contentView.scrollToPosition(i+4);
+                            binding.endSeek.setVisibility(View.GONE);
+                            binding.endSeekRed.setVisibility(View.VISIBLE);
+                            binding.startSeek.setVisibility(View.VISIBLE);
+                            binding.startSeekRed.setVisibility(View.GONE);
+                        }else{
+                            binding.endSeek.setVisibility(View.VISIBLE);
+                            binding.endSeekRed.setVisibility(View.GONE);
+                            binding.startSeek.setVisibility(View.VISIBLE);
+                            binding.startSeekRed.setVisibility(View.GONE);
+
+                        }
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        isSeekbar=true;
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        isSeekbar=false;
+                    }
+                });
+            }
 
             ContentRecyclerAdapter1 adapter;
             CenterLayoutManager layoutManager = new CenterLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -194,48 +259,6 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
 
             adapter = new ContentRecyclerAdapter1((MainActivity) getActivity(), bundle,getContext());
 
-            binding.rvSeekBar.setMax(dataVOS.size()-5);
-            binding.rvSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                    Log.d("i", i +" ");
-                    Log.d("getMax", seekBar.getMax() +" ");
-                    if(isSeekbar){
-                        binding.contentView.scrollToPosition(i+4);
-                    }
-                    if(i==0){
-                        binding.contentView.scrollToPosition(0);
-                        binding.startSeek.setVisibility(View.GONE);
-                        binding.startSeekRed.setVisibility(View.VISIBLE);
-                        binding.endSeek.setVisibility(View.VISIBLE);
-                        binding.endSeekRed.setVisibility(View.GONE);
-                    }else if(i==seekBar.getMax()){
-                        seekBar.setProgress(seekBar.getMax());
-                        binding.contentView.scrollToPosition(i+4);
-                        binding.endSeek.setVisibility(View.GONE);
-                        binding.endSeekRed.setVisibility(View.VISIBLE);
-                        binding.startSeek.setVisibility(View.VISIBLE);
-                        binding.startSeekRed.setVisibility(View.GONE);
-                    }else{
-                        binding.endSeek.setVisibility(View.VISIBLE);
-                        binding.endSeekRed.setVisibility(View.GONE);
-                        binding.startSeek.setVisibility(View.VISIBLE);
-                        binding.startSeekRed.setVisibility(View.GONE);
-
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    isSeekbar=true;
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    isSeekbar=false;
-                }
-            });
-
             binding.contentView.setLayoutManager(layoutManager);
             binding.contentView.setAdapter(adapter);
             binding.contentView.setHasFixedSize(true);
@@ -244,10 +267,11 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
                 public void onFirstVisiblePositionChanged(int position) {
                     Log.d("현재보이는 포지션", " " + position);
                     centerPosition = position+2;
-                    if(!isSeekbar){
-                        binding.rvSeekBar.setProgress(centerPosition-2);
+                    if (!bundle.getString("type").equals("album2040")&&!bundle.getString("type").equals("albumSebu")){
+                        if(!isSeekbar){
+                            binding.rvSeekBar.setProgress(centerPosition-2);
+                        }
                     }
-
                     onImageClicked(centerPosition);
                 }
 
@@ -256,10 +280,11 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
                     Log.d("현재보이는 포지션", " " + position);
                     Log.d("getChildCount()", binding.contentView.getChildCount() + " ");
                     centerPosition = position-2;
-                    if(!isSeekbar){
-                        binding.rvSeekBar.setProgress(centerPosition-2);
+                    if (!bundle.getString("type").equals("album2040")&&!bundle.getString("type").equals("albumSebu")){
+                        if(!isSeekbar){
+                            binding.rvSeekBar.setProgress(centerPosition-2);
+                        }
                     }
-
                     onImageClicked(centerPosition);
                 }
             }));
@@ -280,7 +305,6 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
         for (int i = 0; i < binding.contentView.getChildCount(); i++) {
             View childAt = binding.contentView.getChildAt(i);
             ImageView contentImg = childAt.findViewById(R.id.contentItemImage);
-
 
 
             int width = binding.getSize.getWidth();
@@ -308,10 +332,17 @@ public class ContentsFragment extends Fragment implements View.OnClickListener {
                     ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new GreatFragment(), true, bundle);
                 }else if(bundle.getString("type").equals("small")){
                     ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SmallFragment(), true, bundle);
+                }else if(bundle.getString("type").equals("album2040")){
+                    ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new Album2040Fragment(), true, bundle);
+                }else if(bundle.getString("type").equals("albumSebu")){
+                    ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new AlbumSebuFragment(), true, bundle);
                 }
                 break;
             case R.id.end_seek:
                 binding.rvSeekBar.setProgress(binding.rvSeekBar.getMax());
+                break;
+            case R.id.firstPage:
+                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(), true, bundle);
                 break;
         }
     }

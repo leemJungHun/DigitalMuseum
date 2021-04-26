@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,12 +44,19 @@ public class SmallFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        try {
-            binding = DataBindingUtil.inflate(
-                    inflater, R.layout.fragment_small, container, false);
-        }catch (OutOfMemoryError e){
-            ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new MuseumFragment(), true, bundle);
+        if(binding == null) {
+            if(container!=null) {
+                container.removeAllViews();
+            }
+            try {
+                binding = DataBindingUtil.inflate(
+                        inflater, R.layout.fragment_small, container, false);
+            } catch (OutOfMemoryError|InflateException e) {
+                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new MuseumFragment(), true, bundle);
+                e.printStackTrace();
+            }
         }
+
 
         binding.smallView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -93,6 +101,7 @@ public class SmallFragment extends Fragment implements View.OnClickListener {
         binding.smallView2.setHasFixedSize(true);
 
         binding.backPage.setOnClickListener(this);
+        binding.firstPage.setOnClickListener(this);
 
         return binding.getRoot();
     }
@@ -163,6 +172,9 @@ public class SmallFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.backPage:
                 ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new MuseumFragment(), true, bundle);
+                break;
+            case R.id.firstPage:
+                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(), true, bundle);
                 break;
         }
     }

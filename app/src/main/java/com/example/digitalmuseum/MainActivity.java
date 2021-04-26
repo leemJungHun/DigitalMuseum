@@ -8,10 +8,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.Point;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 
 import com.example.digitalmuseum.databinding.ActivityMainBinding;
@@ -30,13 +34,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean back = false;
     CustomDialog dialog;
     CustomDialog2 dialog2;
+    private View 	decorView;
+    private int	uiOption;
 
     TimerTask addTask;
+    MediaPlayer mediaPlayer;
     Timer timer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        Display display = getWindowManager().getDefaultDisplay();
+
+        Point size = new Point();
+
+        display.getSize(size);
+
+        Log.d("해상도", ">>> size.x : " + size.x + ", size.y : " + size.y);
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.backgroundmusic);
+        mediaPlayer.setLooping(false); //무한재생 방지
+        mediaPlayer.start();
+
+        decorView = getWindow().getDecorView();
+        uiOption = getWindow().getDecorView().getSystemUiVisibility();
+        uiOption |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        uiOption |= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        uiOption |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+        decorView.setSystemUiVisibility( uiOption );
+
         fragmentManager = getSupportFragmentManager();
 
         binding.mainContainer.setOnClickListener(this);
@@ -47,15 +75,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nowFragment = new MainFragment();
 
         transaction
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
                 .replace(R.id.main_container, new MainFragment()).commitAllowingStateLoss();
 
     }
 
     public void setStartFragment(Fragment fragment,boolean isBack, Bundle result) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-
 
         nowFragment = fragment;
 
@@ -74,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         transaction
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
                 .replace(R.id.main_container, fragment).commitAllowingStateLoss();
     }
 
@@ -87,8 +110,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void Media_Start(){
+        if(mediaPlayer!=null){
+            if(!mediaPlayer.isPlaying()){
+                mediaPlayer.start();
+            }
+        }else{
+            mediaPlayer = MediaPlayer.create(this, R.raw.backgroundmusic);
+            mediaPlayer.setLooping(false); //무한재생 방지
+            mediaPlayer.start();
+        }
+    }
+
+    public void Media_Stop(){
+        if(mediaPlayer!=null){
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+            }
+        }
+    }
+
+
     public void Restart_Period(){
         Log.d("Restart","Task");
+
         Stop_Period();
         Start_Period();
     }
@@ -156,8 +201,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             transaction
-                    .setReorderingAllowed(true)
-                    .addToBackStack(null)
                     .replace(R.id.main_container, new MainFragment()).commitAllowingStateLoss();
             return false;
         }

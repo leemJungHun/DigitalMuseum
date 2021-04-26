@@ -3,6 +3,7 @@ package com.example.digitalmuseum.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,8 +39,17 @@ public class MediumFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_medium, container, false);
+        if(binding == null) {
+            if(container!=null) {
+                container.removeAllViews();
+            }
+            try {
+                binding = DataBindingUtil.inflate(
+                        inflater, R.layout.fragment_medium, container, false);
+            } catch (InflateException e) {
+                e.printStackTrace();
+            }
+        }
 
         bundle = getArguments();
         assert bundle != null;

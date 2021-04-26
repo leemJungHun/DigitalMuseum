@@ -16,11 +16,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.example.digitalmuseum.MainActivity;
 import com.example.digitalmuseum.R;
 import com.example.digitalmuseum.fragment.ContentsFragment;
 import com.example.digitalmuseum.fragment.MediumFragment;
+import com.example.digitalmuseum.fragment.NoContentsFragment;
 import com.example.digitalmuseum.fragment.SmallFragment;
 import com.example.digitalmuseum.network.HttpRequestService;
 import com.example.digitalmuseum.network.vo.DataVO;
@@ -47,7 +49,7 @@ public class SmallRecyclerAdapter1 extends RecyclerView.Adapter<SmallRecyclerAda
     private Bundle result;
     private Context context;
     private boolean isClick = false;
-    String URL = "http://10.20.170.240:8080"; //
+    String URL = HttpRequestService.URL + "/kyodong"; //
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
     public SmallRecyclerAdapter1(MainActivity activity, Bundle result,Context context) {
@@ -91,17 +93,19 @@ public class SmallRecyclerAdapter1 extends RecyclerView.Adapter<SmallRecyclerAda
             holder.startMargin.setVisibility(View.GONE);
             holder.endMargin.setVisibility(View.GONE);
         }
-        holder.smallText.setText(item.getTitle());
+        Log.e("Title", item.getTitle());
+
+        holder.smallText.setText(item.getTitle().replaceAll("/n","\n"));
         holder.smallText.setTag(R.string.code,item.getCode());
         holder.smallImage.setTag(R.string.code,item.getCode());
-        holder.smallText.setTag(R.string.title,item.getTitle());
-        holder.smallImage.setTag(R.string.title,item.getTitle());
+        holder.smallText.setTag(R.string.title,item.getTitle().replaceAll("/n",""));
+        holder.smallImage.setTag(R.string.title,item.getTitle().replaceAll("/n",""));
         holder.smallImage.setImageResource(R.drawable.kyodong_img_004_01);
         holder.smallText.setOnClickListener(this);
         holder.smallImage.setOnClickListener(this);
         if(item.getImage()!=null){
             Log.d("getImage"," " + URL+item.getImage());
-            Glide.with(activity).load(URL + item.getImage()).thumbnail(0.01f).into(holder.smallImage);
+            Glide.with(activity).load(URL + item.getImage()).override(400,360).thumbnail(0.01f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.smallImage);
         }
 
 
@@ -140,11 +144,9 @@ public class SmallRecyclerAdapter1 extends RecyclerView.Adapter<SmallRecyclerAda
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     if(response.isSuccessful() && response.body() != null){
                         Gson gson = new Gson();
-                        if(!response.body().get("data").toString().equals("null")){
-                            JsonObject jsonObject = response.body().getAsJsonObject("data");
-                            JsonArray jsonArray;
-                            if(jsonObject.get("datas")!=null){
-                                jsonArray = jsonObject.getAsJsonArray("datas");
+                        if(response.body().get("data")!=null){
+                            JsonArray jsonArray = response.body().getAsJsonArray("data");
+                            if(jsonArray!=null){
                                 for (JsonElement element : jsonArray) {
                                     DataVO dataVO = gson.fromJson(element, DataVO.class);
                                     Log.d("getTitle", " " + dataVO.getTitle());
@@ -158,11 +160,16 @@ public class SmallRecyclerAdapter1 extends RecyclerView.Adapter<SmallRecyclerAda
                             result.putString("SCode", view.getTag(R.string.code).toString());
                             result.putString("ContentTitle", view.getTag(R.string.title).toString());
 
-                            ((MainActivity) Objects.requireNonNull(activity)).setStartFragment(new ContentsFragment(),false, result);
+                            if(dataVOS.size()!=0) {
+                                ((MainActivity) Objects.requireNonNull(activity)).setStartFragment(new ContentsFragment(), false, result);
+                            }else{
+                                ((MainActivity) Objects.requireNonNull(activity)).setStartFragment(new NoContentsFragment(), false, result);
+                            }
                         }
                         else{
                             Log.d("data","null");
                             isClick=false;
+                            ((MainActivity) Objects.requireNonNull(activity)).setStartFragment(new NoContentsFragment(), false, result);
                         }
                         isClick=false;
                     }

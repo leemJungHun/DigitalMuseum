@@ -8,6 +8,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/kyodong_bg_01"
             />
 
@@ -20,8 +21,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="@dimen/dimen_113"
-            android:textSize="@dimen/font_42"
-            android:text="@string/museumTitle"
+            android:textSize="@dimen/font_48"
+            android:text="@string/albumTitle"
             android:textColor="#000000"
             android:fontFamily="@font/ridibatang"
             />
@@ -36,25 +37,137 @@
             app:layout_constraintTop_toBottomOf="@id/mediumTitle"
             android:layout_marginTop="@dimen/dimen_16"
             android:textSize="@dimen/font_24"
-            android:text="@string/museumText"
+            android:text="@string/albumText"
             android:textColor="#000000"
             android:fontFamily="@font/ridibatang"
             />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mediumView"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/year2040"
+            android:layout_width="@dimen/dimen_384"
             android:layout_height="@dimen/dimen_544"
-            android:overScrollMode="never"
+            android:tag="M7"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="@dimen/dimen_156"
-            android:layout_marginEnd="@dimen/dimen_180"
-            />
+            >
+            <ImageView
+                android:layout_width="@dimen/dimen_384"
+                android:layout_height="@dimen/dimen_544"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/kyodong_img_005_01"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1920 ~ 1949"
+                android:fontFamily="@font/ridibatang"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/font_38"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/year5070"
+            android:layout_width="@dimen/dimen_384"
+            android:layout_height="@dimen/dimen_544"
+            android:tag="M8"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/year2040"
+            android:layout_marginStart="@dimen/dimen_24"
+            >
+            <ImageView
+                android:layout_width="@dimen/dimen_384"
+                android:layout_height="@dimen/dimen_544"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/kyodong_img_005_02"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1950 ~ 1979"
+                android:fontFamily="@font/ridibatang"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/font_38"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/year8000"
+            android:layout_width="@dimen/dimen_384"
+            android:layout_height="@dimen/dimen_544"
+            android:tag="M9"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/year5070"
+            android:layout_marginStart="@dimen/dimen_24"
+            >
+            <ImageView
+                android:layout_width="@dimen/dimen_384"
+                android:layout_height="@dimen/dimen_544"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/kyodong_img_005_03"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1980 ~ 1999"
+                android:fontFamily="@font/ridibatang"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/font_38"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/year0020"
+            android:layout_width="@dimen/dimen_384"
+            android:layout_height="@dimen/dimen_544"
+            android:tag="M10"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/year8000"
+            android:layout_marginStart="@dimen/dimen_24"
+            >
+            <ImageView
+                android:layout_width="@dimen/dimen_384"
+                android:layout_height="@dimen/dimen_544"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/kyodong_img_005_04"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="2000 ~ 현재"
+                android:fontFamily="@font/ridibatang"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/font_38"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/backPage"

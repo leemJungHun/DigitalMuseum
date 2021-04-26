@@ -39,7 +39,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdapter.ViewHolder> implements View.OnClickListener {
-    private ArrayList<MediumVO> mData = null ;
+    private ArrayList<MediumVO> mData = null;
     private ArrayList<SmallVO> smallVOS = new ArrayList<>();
     private ArrayList<DataVO> dataVOS = new ArrayList<>();
     private MainActivity activity;
@@ -57,8 +57,8 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
     @Override
     @NonNull
     public AlbumRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext() ;
-        View view = LayoutInflater.from(context).inflate(R.layout.item_album, parent, false) ;
+        Context context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.item_album, parent, false);
         return new ViewHolder(view);
     }
 
@@ -66,24 +66,23 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
     @Override
     public void onBindViewHolder(AlbumRecyclerAdapter.ViewHolder holder, int position) {
 
-        MediumVO item = mData.get(position) ;
+        MediumVO item = mData.get(position);
 
         Log.d("아이템 크기", " " + mData.size());
         Log.d("아이템 셋", " " + position);
 
         //holder.scheduleIcon.setImageDrawable(item.getIcon()) ;
         holder.mediumText.setText(item.getTitle());
-        holder.mediumText.setTag(R.string.code,item.getCode());
-        holder.mediumImg.setTag(R.string.code,item.getCode());
-        holder.mediumText.setTag(R.string.title,item.getTitle());
-        holder.mediumImg.setTag(R.string.title,item.getTitle());
+        holder.mediumText.setTag(R.string.code, item.getCode());
+        holder.mediumImg.setTag(R.string.code, item.getCode());
+        holder.mediumText.setTag(R.string.title, item.getTitle());
+        holder.mediumImg.setTag(R.string.title, item.getTitle());
         holder.mediumText.setOnClickListener(this);
         holder.mediumImg.setOnClickListener(this);
         holder.startMargin.setVisibility(View.GONE);
         holder.endMargin.setVisibility(View.GONE);
-        switch (position){
+        switch (position) {
             case 0:
-                holder.startMargin.setVisibility(View.VISIBLE);
                 Glide.with(activity).load(R.drawable.kyodong_album_01).into(holder.mediumImg);
                 break;
             case 1:
@@ -99,7 +98,6 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
                 Glide.with(activity).load(R.drawable.kyodong_img_001_04).into(holder.mediumImg);
                 break;
             case 5:
-                holder.endMargin.setVisibility(View.VISIBLE);
                 Glide.with(activity).load(R.drawable.kyodong_img_001_05).into(holder.mediumImg);
                 break;
         }
@@ -108,17 +106,17 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return itemCount ;
+        return itemCount;
     }
 
     public void updateData(ArrayList<MediumVO> mediumList) {
-        if(mData!=null) {
+        if (mData != null) {
             mData.clear();
-        }else{
+        } else {
             mData = new ArrayList<>();
         }
         mData.addAll(mediumList);
-        itemCount=mData.size();
+        itemCount = mData.size();
         notifyDataSetChanged();
     }
 
@@ -131,56 +129,41 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
 
         HttpRequestService httpRequestService = retrofit.create(HttpRequestService.class);
 
-        if(!itemClick){
-            itemClick=true;
+        if (!itemClick) {
+            itemClick = true;
             httpRequestService.getSmallList(view.getTag(R.string.code).toString()).enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    itemClick=false;
-                    if(response.isSuccessful() && response.body() != null){
+                    itemClick = false;
+                    if (response.isSuccessful() && response.body() != null) {
                         Gson gson = new Gson();
-                        if(!response.body().get("data").toString().equals("null")){
+                        if (!response.body().get("data").toString().equals("null")) {
                             Fragment fragment;
-                            JsonObject jsonObject = response.body().getAsJsonObject("data");
-                            JsonArray jsonArray;
-                            if(jsonObject.get("smalls")!=null){
-                                jsonArray = jsonObject.getAsJsonArray("smalls");
-                                for (JsonElement element : jsonArray) {
-                                    SmallVO smallVO = gson.fromJson(element, SmallVO.class);
-                                    Log.d("getTitle", " " + smallVO.getTitle());
-                                    Log.d("getImage", " " + smallVO.getImage());
-                                    Log.d("getCode", " " + smallVO.getCode());
-                                    smallVOS.add(smallVO);
-                                }
-                                fragment = new SmallFragment();
-                                result.putParcelableArrayList("smallVOS", smallVOS);
-                            }else{
-                                jsonArray = jsonObject.getAsJsonArray("datas");
-                                for (JsonElement element : jsonArray) {
-                                    DataVO dataVO = gson.fromJson(element, DataVO.class);
-                                    Log.d("getTitle", " " + dataVO.getTitle());
-                                    Log.d("getProductedAt", " " + dataVO.getProductedAt());
-                                    Log.d("getCode", " " + dataVO.getCode());
-                                    dataVOS.add(dataVO);
-                                }
-                                fragment = new ContentsFragment();
-                                result.putParcelableArrayList("dataVOS", dataVOS);
-                                result.putString("type", "album");
+                            JsonArray jsonArray = response.body().getAsJsonArray("data");
+
+                            for (JsonElement element : jsonArray) {
+                                DataVO dataVO = gson.fromJson(element, DataVO.class);
+                                Log.d("getTitle", " " + dataVO.getTitle());
+                                Log.d("getProductedAt", " " + dataVO.getProductedAt());
+                                Log.d("getCode", " " + dataVO.getCode());
+                                dataVOS.add(dataVO);
                             }
+                            fragment = new ContentsFragment();
+                            result.putParcelableArrayList("dataVOS", dataVOS);
+                            result.putString("type", "album");
 
 
                             result.putString("MCode", view.getTag(R.string.code).toString());
                             result.putString("ContentTitle", view.getTag(R.string.title).toString());
 
-                            ((MainActivity) Objects.requireNonNull(activity)).setStartFragment(fragment,false, result);
-                        }
-                        else{
+                            ((MainActivity) Objects.requireNonNull(activity)).setStartFragment(fragment, false, result);
+                        } else {
                             result.putString("type", "album");
                             result.putString("ContentTitle", view.getTag(R.string.title).toString());
                             result.putString("MCode", view.getTag(R.string.code).toString());
 
-                            ((MainActivity) Objects.requireNonNull(activity)).setStartFragment(new NoContentsFragment(),false, result);
-                            Log.d("data","null");
+                            ((MainActivity) Objects.requireNonNull(activity)).setStartFragment(new NoContentsFragment(), false, result);
+                            Log.d("data", "null");
                         }
 
                     }
@@ -189,7 +172,7 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
-                    itemClick=false;
+                    itemClick = false;
                 }
             });
         }
@@ -198,18 +181,18 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mediumImg ;
-        TextView mediumText ;
+        ImageView mediumImg;
+        TextView mediumText;
 
         ConstraintLayout startMargin;
         ConstraintLayout endMargin;
 
         ViewHolder(View itemView) {
-            super(itemView) ;
+            super(itemView);
 
             // 뷰 객체에 대한 참조. (hold strong reference)
-            mediumText = itemView.findViewById(R.id.mediumItemText) ;
-            mediumImg = itemView.findViewById(R.id.mediumItemImage) ;
+            mediumText = itemView.findViewById(R.id.mediumItemText);
+            mediumImg = itemView.findViewById(R.id.mediumItemImage);
 
             startMargin = itemView.findViewById(R.id.start_margin);
             endMargin = itemView.findViewById(R.id.end_margin);

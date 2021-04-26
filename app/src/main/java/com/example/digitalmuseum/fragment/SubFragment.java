@@ -1,11 +1,15 @@
 package com.example.digitalmuseum.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,8 +44,18 @@ public class SubFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_sub, container, false);
+
+        if(binding == null) {
+            if(container!=null) {
+                container.removeAllViews();
+            }
+            try {
+                binding = DataBindingUtil.inflate(
+                        inflater, R.layout.fragment_sub, container, false);
+            } catch (InflateException e) {
+                e.printStackTrace();
+            }
+        }
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(HttpRequestService.URL)
@@ -70,11 +84,6 @@ public class SubFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.album:
                 LCode = "L2";
-                ArrayList<MediumVO> mediumVOS = new ArrayList<>();
-                String[] year = {"1927-1946", "1947-1966","1967-1986", "1987-2006", "2007-2016", "2017-현재"};
-                for(int i = 0 ; i<year.length;i++){
-                    MediumVO mediumVO = new MediumVO();
-                }
                 result.putString("LCode", LCode);
                 ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new AlbumFragment(),false, result);
                 break;

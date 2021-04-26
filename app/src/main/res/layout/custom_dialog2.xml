@@ -16,6 +16,16 @@
         android:background="@drawable/radius_line_20"
         >
         <ImageView
+            android:layout_width="@dimen/dimen_32"
+            android:layout_height="@dimen/dimen_32"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/dimen_16"
+            android:layout_marginEnd="@dimen/dimen_16"
+            android:src="@drawable/kyodong_icon_cancel"
+            />
+
+        <ImageView
             android:id="@+id/contentImage"
             android:layout_width="@dimen/dimen_1440"
             android:layout_height="@dimen/dimen_736"

@@ -14,9 +14,9 @@ public class DetailsVO {
     String storage;
     String storeNum;
     String content;
-    String imgUrl;
+    String image;
 
-    public DetailsVO(String code, String title, String productedAt, int amount, String size, String material, String note, String origin, String production, String source, String storage, String storeNum, String content, String imgUrl) {
+    public DetailsVO(String code, String title, String productedAt, int amount, String size, String material, String note, String origin, String production, String source, String storage, String storeNum, String content, String image) {
         this.code = code;
         this.title = title;
         this.productedAt = productedAt;
@@ -30,7 +30,7 @@ public class DetailsVO {
         this.storage = storage;
         this.storeNum = storeNum;
         this.content = content;
-        this.imgUrl = imgUrl;
+        this.image = image;
     }
 
     public String getCode() {
@@ -138,10 +138,10 @@ public class DetailsVO {
     }
 
     public String getImgUrl() {
-        return imgUrl;
+        return image;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImgUrl(String image) {
+        this.image = image;
     }
 }

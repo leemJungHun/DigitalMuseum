@@ -15,10 +15,17 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/back_white_img"
+                android:layout_width="@dimen/dimen_327"
+                android:layout_height="@dimen/dimen_256"
+                android:background="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/contentItemImage"
                 android:layout_width="@dimen/dimen_327"
                 android:layout_height="@dimen/dimen_256"
-                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,9 +47,9 @@
             <TextView
                 android:id="@+id/contentItemTitle"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dimen_66"
                 android:fontFamily="@font/nanumbarungothic_r"
-                android:gravity="center"
+                android:gravity="center|top"
                 android:textColor="#000000"
                 android:textSize="@dimen/font_18"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -56,15 +63,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_32"
-            android:layout_marginTop="@dimen/dimen_36"
+            android:layout_marginTop="@dimen/dimen_5"
             app:layout_constraintStart_toEndOf="@id/start_margin"
             app:layout_constraintTop_toBottomOf="@id/pattern_01">
+
+            <ImageView
+                android:id="@+id/back_white_img2"
+                android:layout_width="@dimen/dimen_327"
+                android:layout_height="@dimen/dimen_256"
+                android:background="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/contentItemImage2"
                 android:layout_width="@dimen/dimen_327"
                 android:layout_height="@dimen/dimen_256"
-                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -90,6 +104,7 @@
                 android:fontFamily="@font/nanumbarungothic_r"
                 android:gravity="center"
                 android:textColor="#000000"
+                android:text=""
                 android:textSize="@dimen/font_18"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

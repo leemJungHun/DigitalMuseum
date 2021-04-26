@@ -69,6 +69,10 @@ public class NoContentsFragment extends Fragment implements View.OnClickListener
                     ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new GreatFragment(), true, bundle);
                 }else if(bundle.getString("type").equals("small")){
                     ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SmallFragment(), true, bundle);
+                }else if(bundle.getString("type").equals("album2040")){
+                    ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new Album2040Fragment(), true, bundle);
+                }else if(bundle.getString("type").equals("albumSebu")){
+                    ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new AlbumSebuFragment(), true, bundle);
                 }
 
                 break;

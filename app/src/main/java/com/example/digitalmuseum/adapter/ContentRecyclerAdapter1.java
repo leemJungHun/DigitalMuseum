@@ -3,6 +3,7 @@ package com.example.digitalmuseum.adapter;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.TransactionTooLargeException;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.digitalmuseum.dialog.CustomDialog;
 import com.example.digitalmuseum.MainActivity;
 import com.example.digitalmuseum.R;
@@ -42,7 +44,7 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
     private boolean isFirst = true;
     private Context context;
     private boolean isClick = false;
-    String URL = "http://10.20.170.240:8080"; //
+    String URL = HttpRequestService.URL + "/kyodong"; //
     CustomDialog dialog;
     CustomDialog2 dialog2;
 
@@ -81,6 +83,7 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
         }
 
 
+
         GradientDrawable drawable =
                 (GradientDrawable) context.getDrawable(R.drawable.radius_line_5);
 
@@ -103,17 +106,34 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
         title = title.replaceAll("\\?", "");
         holder.pattern1.setVisibility(View.VISIBLE);
         holder.startMargin.setVisibility(View.GONE);
-        holder.contentTitle.setText(title);
-        holder.contentProduct.setText(product);
         holder.contentTitle.setTag(R.string.code,item.getCode());
         holder.contentImage.setTag(R.string.code,item.getCode());
         holder.contentProduct.setTag(R.string.code,item.getCode());
         holder.contentTitle.setTag(R.string.imgUrl,item.getImage());
         holder.contentImage.setTag(R.string.imgUrl,item.getImage());
         holder.contentProduct.setTag(R.string.imgUrl,item.getImage());
+        if(result.getString("MCode").equals("M6")){
+            String[] titleAndProduct = title.split(",");
+            holder.contentProduct.setText(titleAndProduct[0]);
+            holder.contentTitle.setText(titleAndProduct[1]);
+            holder.contentExplainText.setVisibility(View.VISIBLE);
+            holder.contentExplainText.setText(item.getContent());
+        }else{
+            holder.contentTitle.setText(title);
+            holder.contentProduct.setText(product);
+            holder.contentExplainText.setVisibility(View.GONE);
+        }
         if (item.getImage() != null) {
             Log.d("getImage", " " + URL + item.getImage());
-            Glide.with(activity).load(URL + item.getImage()).thumbnail(0.01f).into(holder.contentImage);
+            try {
+                if(!result.getString("type").equals("albumSebu")&&!result.getString("type").equals("great")&&!result.getString("type").equals("album2040")) {
+                    Glide.with(activity).load(URL + item.getImage()).override(400,360).thumbnail(0.001f).diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop().into(holder.contentImage);
+                }else{
+                    Glide.with(activity).load(URL + item.getImage()).override(400,360).thumbnail(0.001f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.contentImage);
+                }
+            }catch (RuntimeException e){
+                Log.e("runtime", e + " ");
+            }
         }
 
         holder.contentTitle.setOnClickListener(this);
@@ -147,7 +167,7 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
     public void onClick(View view) {
         if(!isClick){
             isClick=true;
-            if(!result.getString("type").equals("album")&&!result.getString("type").equals("great")){
+            if(!result.getString("type").equals("albumSebu")&&!result.getString("type").equals("great")&&!result.getString("type").equals("album2040")){
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl(HttpRequestService.URL)
                         .addConverterFactory(GsonConverterFactory.create())
@@ -179,7 +199,7 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
                         isClick=false;
                     }
                 });
-            }else if(result.getString("type").equals("album")){
+            }else if(result.getString("type").equals("albumSebu")||result.getString("type").equals("album2040")){
                 Dialog2(view.getTag(R.string.imgUrl).toString());
             }
         }
@@ -190,6 +210,7 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
         ImageView contentImage;
         TextView contentTitle;
         TextView contentProduct;
+        TextView contentExplainText;
         ConstraintLayout startMargin;
         ConstraintLayout pattern1;
 
@@ -199,6 +220,7 @@ public class ContentRecyclerAdapter1 extends RecyclerView.Adapter<ContentRecycle
             // 뷰 객체에 대한 참조. (hold strong reference)
             contentProduct = itemView.findViewById(R.id.contentItemProducted);
             contentTitle = itemView.findViewById(R.id.contentItemTitle);
+            contentExplainText = itemView.findViewById(R.id.contentExplainText);
             contentImage = itemView.findViewById(R.id.contentItemImage);
             startMargin = itemView.findViewById(R.id.start_margin);
             pattern1 = itemView.findViewById(R.id.pattern_01);

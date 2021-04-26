@@ -1,10 +1,13 @@
 package com.example.digitalmuseum.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.digitalmuseum.MainActivity;
 import com.example.digitalmuseum.R;
 import com.example.digitalmuseum.databinding.FragmentMainBinding;
@@ -42,9 +46,17 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_main, container, false);
-
+        if(binding == null) {
+            if(container!=null) {
+                container.removeAllViews();
+            }
+            try {
+                binding = DataBindingUtil.inflate(
+                        inflater, R.layout.fragment_main, container, false);
+            } catch (InflateException e) {
+                e.printStackTrace();
+            }
+        }
         forwardDrawable.add(getResources().getDrawable(R.drawable.kyodong_img_001_02));
         forwardDrawable.add(getResources().getDrawable(R.drawable.kyodong_img_001_04));
         forwardDrawable.add(getResources().getDrawable(R.drawable.kyodong_img_001_06));
@@ -56,7 +68,7 @@ public class MainFragment extends Fragment {
         backendDrawable.add(getResources().getDrawable(R.drawable.kyodong_img_001_09));
         backendDrawable.add(getResources().getDrawable(R.drawable.kyodong_img_001_11));
 
-
+        ((MainActivity) Objects.requireNonNull(getActivity())).Media_Start();
 
         Stop_Period();
 
@@ -64,6 +76,7 @@ public class MainFragment extends Fragment {
 
         binding.mainScreen.setOnClickListener(view -> {
             Stop_Period();
+            ((MainActivity) Objects.requireNonNull(getActivity())).Media_Stop();
             ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(),false, null);
         });
 
@@ -87,7 +100,7 @@ public class MainFragment extends Fragment {
                         }else {
                             backendNum=0;
                         }
-                        outImg.setImageDrawable(backendDrawable.get(backendNum));
+                        Glide.with(Objects.requireNonNull(getActivity())).load(backendDrawable.get(backendNum)).into(outImg);
                         break;
                     case R.id.forward_img:
                         if(forwardNum<4){
@@ -95,7 +108,7 @@ public class MainFragment extends Fragment {
                         }else {
                             forwardNum=0;
                         }
-                        outImg.setImageDrawable(forwardDrawable.get(forwardNum));
+                        Glide.with(Objects.requireNonNull(getActivity())).load(forwardDrawable.get(forwardNum)).into(outImg);
                         break;
                 }
                 outImg.setVisibility(View.GONE);

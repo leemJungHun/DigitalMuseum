@@ -69,9 +69,9 @@ public class GreatFragment extends Fragment implements View.OnClickListener {
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
-        if(!isClick){
-            isClick=true;
-            if(view.getId()!=R.id.backPage){
+        if (!isClick) {
+            isClick = true;
+            if (view.getId() != R.id.backPage) {
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl(HttpRequestService.URL)
                         .addConverterFactory(GsonConverterFactory.create())
@@ -82,65 +82,53 @@ public class GreatFragment extends Fragment implements View.OnClickListener {
                 httpRequestService.getSmallList(view.getTag().toString()).enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        if(response.isSuccessful() && response.body() != null){
+                        Log.e("onResponse", " " + response);
+                        if (response.isSuccessful() && response.body() != null) {
                             Gson gson = new Gson();
-                            if(!response.body().get("data").toString().equals("null")){
+                            if (response.body().get("data")!=null) {
                                 Fragment fragment;
-                                JsonObject jsonObject = response.body().getAsJsonObject("data");
-                                JsonArray jsonArray;
-                                if(jsonObject.get("smalls")!=null){
-                                    jsonArray = jsonObject.getAsJsonArray("smalls");
-                                    for (JsonElement element : jsonArray) {
-                                        SmallVO smallVO = gson.fromJson(element, SmallVO.class);
-                                        Log.d("getTitle", " " + smallVO.getTitle());
-                                        Log.d("getImage", " " + smallVO.getImage());
-                                        Log.d("getCode", " " + smallVO.getCode());
-                                        smallVOS.add(smallVO);
-                                    }
-                                    fragment = new SmallFragment();
-                                    result.putParcelableArrayList("smallVOS", smallVOS);
-                                }else{
-                                    jsonArray = jsonObject.getAsJsonArray("datas");
-                                    for (JsonElement element : jsonArray) {
-                                        DataVO dataVO = gson.fromJson(element, DataVO.class);
-                                        Log.d("getTitle", " " + dataVO.getTitle());
-                                        Log.d("getProductedAt", " " + dataVO.getProductedAt());
-                                        Log.d("getCode", " " + dataVO.getCode());
-                                        dataVOS.add(dataVO);
-                                    }
-                                    fragment = new ContentsFragment();
-                                    result.putParcelableArrayList("dataVOS", dataVOS);
-                                    result.putString("type", "great");
+                                JsonArray jsonArray = response.body().getAsJsonArray("data");
+
+                                for (JsonElement element : jsonArray) {
+                                    DataVO dataVO = gson.fromJson(element, DataVO.class);
+                                    Log.d("getTitle", " " + dataVO.getTitle());
+                                    Log.d("getProductedAt", " " + dataVO.getProductedAt());
+                                    Log.d("getCode", " " + dataVO.getCode());
+                                    dataVOS.add(dataVO);
                                 }
-                                if(view.getId()==R.id.headmaster){
-                                    result.putString("ContentTitle", "교장연혁");
-                                }else if(view.getId()==R.id.history){
-                                    result.putString("ContentTitle", "역대 교동인");
+                                fragment = new ContentsFragment();
+                                result.putParcelableArrayList("dataVOS", dataVOS);
+                                result.putString("type", "great");
+
+                                if (view.getId() == R.id.headmaster) {
+                                    result.putString("ContentTitle", "역대 교장 선생님");
+                                } else if (view.getId() == R.id.history) {
+                                    result.putString("ContentTitle", "자랑스러운 선배님");
                                 }
 
                                 result.putString("MCode", view.getTag().toString());
 
-                                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(fragment,false, result);
-                            }
-                            else{
-                                Log.d("data","null");
-                                isClick=false;
+                                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(fragment, false, result);
+                            } else {
+                                Log.d("data", "null");
+                                isClick = false;
                             }
 
                         }
-                        isClick=false;
+                        isClick = false;
                     }
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        isClick=false;
+                        Log.e("onFailure"," " + t.getMessage());
+                        isClick = false;
                     }
                 });
             }
         }
         switch (view.getId()) {
             case R.id.backPage:
-                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(),true, null);
+                ((MainActivity) Objects.requireNonNull(getActivity())).setStartFragment(new SubFragment(), true, null);
                 break;
         }
 
